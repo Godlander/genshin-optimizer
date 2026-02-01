@@ -1,7 +1,59 @@
-'use client'
-import { ColorText, SqBadge, TranslateBase } from '@genshin-optimizer/common/ui'
+import {
+  BootstrapTooltip,
+  ColorText,
+  SqBadge,
+  TranslateBase,
+} from '@genshin-optimizer/common/ui'
 import '@genshin-optimizer/gi/theme' // import to validate typing for color variants
-import type { ReactNode } from 'react'
+import { Divider, Typography } from '@mui/material'
+import type { ReactElement, ReactNode } from 'react'
+
+function LinkedTooltip({
+  ns = '',
+  baseKey18 = '',
+  values = '',
+  color,
+  children,
+}: {
+  ns?: string
+  baseKey18?: string
+  values?: string
+  color?: string
+  children?: ReactElement
+}) {
+  const tooltipContent = (
+    <>
+      <Typography variant="h5">
+        <Translate
+          ns={ns}
+          key18={`${baseKey18}.name`}
+          values={
+            values !== ''
+              ? Object.fromEntries(Object.entries(JSON.parse(values)))
+              : undefined
+          }
+        />
+      </Typography>
+      <Divider />
+      <Translate
+        ns={ns}
+        key18={`${baseKey18}.description`}
+        values={
+          values !== ''
+            ? Object.fromEntries(Object.entries(JSON.parse(values)))
+            : undefined
+        }
+      />
+    </>
+  )
+  return (
+    <BootstrapTooltip title={tooltipContent}>
+      <ColorText sx={{ textDecoration: 'underline' }} color={color}>
+        {children}
+      </ColorText>
+    </BootstrapTooltip>
+  )
+}
 
 const textComponents = {
   anemo: <ColorText color="anemo" />,
@@ -24,6 +76,9 @@ const textComponents = {
   bloom: <ColorText color="bloom" />,
   burgeon: <ColorText color="burgeon" />,
   hyperbloom: <ColorText color="hyperbloom" />,
+  lunarcrystallize: <ColorText color="lunarcrystallize" />,
+  colorText: <ColorText />,
+  tooltip: <LinkedTooltip />,
 }
 
 const badgeComponents = {
@@ -47,6 +102,8 @@ const badgeComponents = {
   bloom: <SqBadge color="bloom" />,
   burgeon: <SqBadge color="burgeon" />,
   hyperbloom: <SqBadge color="hyperbloom" />,
+  lunarcrystallize: <SqBadge color="lunarcrystallize" />,
+  colorText: <ColorText />,
 }
 
 export function Translate({
